@@ -1,0 +1,67 @@
+<link href="__PUBLIC__css/bootstrap.min.css" rel="stylesheet">
+   <script src="__PUBLIC__jquery.js"></script>
+   <script src="__PUBLIC__js/bootstrap.min.js"></script>
+   
+
+
+<ul id="myTab" class="nav nav-tabs">
+   <foreach name="specname" item="v" key="k">
+
+   <li class="<if condition="$k eq 0">active</if>"><a href="#home{$k}" data-toggle="tab">
+
+      {$v.spec_name}</a>
+   </li>
+   </foreach>
+   
+</ul>
+
+
+<div id="myTabContent" class="tab-content">
+   <foreach  name="specname" item="vv" key="kk">
+   <div class="tab-pane fade in <if condition="$kk eq 0"> active</if>" id="home{$kk}">
+      <foreach name="vv.cc" item="value">
+      <button class="btn btn-small" type="button" item-id="{$value.id}"  >{$value.item}</button>
+      </foreach>
+   </div>
+   </foreach>
+      <div style="padding: 100px 0 0 0;">
+         <button class="bb" type="button" >添加规格</button>
+         <button type="button">取消</button>
+      </div>
+</div>
+<script type="text/javascript">
+$('.btn').click(function(){
+   
+  
+   if ($(this).hasClass('btn-success')) {
+      $(this).removeClass('btn-success');
+   }else{
+      $(this).addClass('btn-success');
+   }
+
+})
+
+$('.bb').click(function(){
+   var item_id = [];
+  $('.btn-success').each(function(){
+      
+      item_id.push($(this).attr('item-id'));
+  });
+  
+  if (item_id.length ==0) {
+      layer.msg('请选择规格',{icon:5});
+      return;
+  }
+  $.ajax({
+      type:'POST',
+      data:{id:item_id},
+      url:'{:U("Goods/handel_group")}',
+      dataType:'josn',
+      success : function (data) {
+         console.log(data);
+      }
+  })
+})
+
+
+</script>
